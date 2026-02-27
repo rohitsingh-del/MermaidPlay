@@ -11,8 +11,11 @@ const config = {
       '$/*': './src/lib/*'
     },
     adapter: adapter({
-      pages: 'docs',
-      fallback: '404.html'
+      pages: 'build',
+      assets: 'build',
+      fallback: 'index.html',
+      precompress: false,
+      strict: true
     })
   }
 };
