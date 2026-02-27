@@ -209,6 +209,75 @@ ${svgString}`);
     });
   };
 
+  const downloadJPG: Exporter = (context, image) => {
+    return () => {
+      const { canvas } = context;
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      simulateDownload(
+        getFileName('jpg'),
+        canvas.toDataURL('image/jpeg', 0.95).replace('image/jpeg', 'image/octet-stream')
+      );
+    };
+  };
+
+  const onDownloadJPG = async (event: Event) => {
+    await exportImage(event, downloadJPG);
+    logEvent('download', {
+      type: 'jpg'
+    });
+  };
+
+  const onDownloadPDF = async (event: Event) => {
+    $inputStateStore.panZoom = false;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await waitForRender();
+    const svg = document.querySelector<HTMLElement>('#container svg');
+    if (!svg) {
+      throw new Error('svg not found');
+    }
+    const box = svg.getBoundingClientRect();
+    const svgEl = svg as unknown as SVGSVGElement;
+    const viewBox = svgEl.viewBox?.baseVal;
+    const contentWidth = viewBox && viewBox.width > 0 ? viewBox.width : box.width;
+    const contentHeight = viewBox && viewBox.height > 0 ? viewBox.height : box.height;
+
+    const canvas = document.createElement('canvas');
+    const multiplier = 2;
+    canvas.width = contentWidth * multiplier;
+    canvas.height = contentHeight * multiplier;
+    const context = canvas.getContext('2d');
+    if (!context) {
+      throw new Error('context not found');
+    }
+    context.fillStyle = window.getComputedStyle(document.body).getPropertyValue('--background');
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    const image = new Image();
+    image.addEventListener('load', () => {
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      // Create a simple PDF with embedded image
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      // Use a minimal PDF approach: open in new window for print/save
+      const printWindow = window.open('');
+      if (printWindow) {
+        printWindow.document.write(`<html><head><title>Mermaid Play Diagram</title></head><body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#fff;"><img src="${imgData}" style="max-width:100%;max-height:100vh;" /></body></html>`);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+      }
+      $inputStateStore.panZoom = true;
+    });
+    image.src = `data:image/svg+xml;base64,${getBase64SVG(svg, canvas.width, canvas.height)}`;
+    setTimeout(() => {
+      if (!$inputStateStore.panZoom) {
+        $inputStateStore.panZoom = true;
+      }
+    }, 2000);
+    event.stopPropagation();
+    event.preventDefault();
+    logEvent('download', { type: 'pdf' });
+  };
+
   let imageSizeMode: 'auto' | 'width' | 'height' = $state('auto');
 
   $effect(() => {
@@ -256,6 +325,10 @@ ${svgString}`);
     <div class="flex gap-2">
       {@render dualActionButton('PNG', onDownloadPNG)}
       {@render dualActionButton('SVG', onDownloadSVG)}
+    </div>
+    <div class="flex gap-2">
+      {@render dualActionButton('JPG', onDownloadJPG)}
+      {@render dualActionButton('PDF', onDownloadPDF)}
     </div>
     <Separator />
     {#if isClipboardAvailable()}
