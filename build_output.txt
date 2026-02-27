@@ -1,0 +1,57 @@
+npm warn Unknown project config "auto-install-peers". This will stop working in the next major version of npm.
+
+> mermaid-live-editor@2.0.67 build
+> vite build
+
+[36mvite v7.3.1 [32mbuilding ssr environment for production...[36m[39m
+transforming...
+8:51:44 pm [vite-plugin-svelte] src/lib/components/Card/Tabs.svelte:5:5 This reference only captures the initial value of `activeTabID`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+3: import { fade } from 'svelte/transition';
+4: let { tabs, activeTabID, onselect } = $props();
+5: if (!activeTabID && tabs.length > 0) {
+                   ^
+6:     activeTabID = tabs[0].id;
+7: }
+8:51:44 pm [vite-plugin-svelte] src/lib/components/Card/Tabs.svelte:5:20 This reference only captures the initial value of `tabs`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+3: import { fade } from 'svelte/transition';
+4: let { tabs, activeTabID, onselect } = $props();
+5: if (!activeTabID && tabs.length > 0) {
+                           ^
+6:     activeTabID = tabs[0].id;
+7: }
+8:51:44 pm [vite-plugin-svelte] src/lib/components/Card/Tabs.svelte:6:18 This reference only captures the initial value of `tabs`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+4: let { tabs, activeTabID, onselect } = $props();
+5: if (!activeTabID && tabs.length > 0) {
+6:     activeTabID = tabs[0].id;
+                         ^
+7: }
+8: const toggleTabs = (tab) => {
+8:51:45 pm [vite-plugin-svelte] src/lib/components/ui/toggle-group/toggle-group.svelte:14:4 This reference only captures the initial value of `variant`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+12: let { ref = $bindable(null), value = $bindable(), class: className, size = 'default', variant = 'default', ...restProps } = $props();
+13: setToggleGroupCtx({
+14:     variant,
+               ^
+15:     size
+16: });
+8:51:45 pm [vite-plugin-svelte] src/lib/components/ui/toggle-group/toggle-group.svelte:15:4 This reference only captures the initial value of `size`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+13: setToggleGroupCtx({
+14:     variant,
+15:     size
+            ^
+16: });
+17: </script>
+[32m✓[39m 257 modules transformed.
+[31m✗[39m Build failed in 3.93s
+[31merror during build:
+[31m[vite:load-fallback] Could not load C:\Users\HP\OneDrive\Desktop\mermaid-live-editor-develop\mermaid-live-editor-develop\src\lib/components/Card.svelte (imported by src/lib/components/Actions.svelte): ENOENT: no such file or directory, open 'C:\Users\HP\OneDrive\Desktop\mermaid-live-editor-develop\mermaid-live-editor-develop\src\lib\components\Card.svelte'[31m
+    at async open (node:internal/fs/promises:637:25)
+    at async Object.readFile (node:internal/fs/promises:1269:14)
+    at async Object.handler (file:///C:/Users/HP/OneDrive/Desktop/mermaid-live-editor-develop/mermaid-live-editor-develop/node_modules/vite/dist/node/chunks/config.js:33169:21)
+    at async PluginDriver.hookFirstAndGetPlugin (file:///C:/Users/HP/OneDrive/Desktop/mermaid-live-editor-develop/mermaid-live-editor-develop/node_modules/rollup/dist/es/shared/node-entry.js:22453:28)
+    at async file:///C:/Users/HP/OneDrive/Desktop/mermaid-live-editor-develop/mermaid-live-editor-develop/node_modules/rollup/dist/es/shared/node-entry.js:21445:33
+    at async Queue.work (file:///C:/Users/HP/OneDrive/Desktop/mermaid-live-editor-develop/mermaid-live-editor-develop/node_modules/rollup/dist/es/shared/node-entry.js:22681:32)[39m
